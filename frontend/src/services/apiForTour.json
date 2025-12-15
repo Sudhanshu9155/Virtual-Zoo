@@ -1,0 +1,51 @@
+[
+  {
+    "title": "London Zoo",
+    "description": "Explore the beautiful entrance area of the famous zoo.",
+    "image": "https://disneyanddaysout.co.uk/wp-content/uploads/2024/06/maxresdefault-1.jpg",
+    "streetViewUrl": "https://www.google.com/maps/embed?pb=!3m2!1sen!2sin!4v1765351490189!5m2!1sen!2sin!6m8!1m7!1sIjj9Y7gfTeG2us8hp0OgNA!2m2!1d51.53391057725359!2d-0.1516299728197024!3f40!4f0!5f0.7820865974627469"
+  },
+  {
+    "id": 2,
+    "title": "Singapore Zoo",
+    "description": "Explore stunning landscapes and incredible wildlife diversity.",
+    "image": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyTJ9meSXQjCTe1Rjij9tlL9VWwXrKiXtasR1WO_kKIPxpCuyZR6mtebEO2gjJtHlICWY4iqqBAcIBsZRuSrs26LtJjsrb47U35hbCZqAiPmXrDpfso03HrHzfHKWsuYzvolX2-_aQsghbW=s1360-w1360-h1020-rw",
+    "streetViewUrl": "https://www.google.com/maps/embed?pb=!3m2!1sen!2sin!4v1765352736326!5m2!1sen!2sin!6m8!1m7!1spw4XNOTlNSQxP7fRWIz1yQ!2m2!1d1.403717196194173!2d103.7937759980863!3f299.88745!4f0.11253999999999564!5f0.7820865974627469"
+  },
+
+  {
+    "id": 3,
+    "title": "Bronx Zoo",
+    "description": "Discover lush forest habitats and diverse wildlife exhibits.",
+    "image": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSzfnD0Nk5uehwg2ZebQeYAGsQkwr6YhvEQA8Tmq4oJrXDV4fe5ZbhyLjDF4l2ZXNRRkj5nfa3JC4EgLEZZONTnID3pG4vTetkJFAOa7AZJ1BZkbLNksPbDFoIAAGjEijH-1HV48=s1360-w1360-h1020-rw",
+    "streetViewUrl": "https://www.google.com/maps/embed?pb=!4v1765433657919!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJREU5b3JSdFFF!2m2!1d40.85195636913276!2d-73.8800508996896!3f233.08908654043486!4f-13.41618167869592!5f0.7820865974627469"
+  },
+  {
+    "id": 4,
+    "title": "San Diego Zoo",
+    "description": "Walk through world-famous open habitats and rich greenery.",
+    "image": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyMT-xOxD_gaeAgcDHQ2NnaZ_pPI4bw65O3ikq3T4vO7uO37E3ZUhUgZx07fj48xDP_rreA4lD2ZgR_NZ22XfRTnsj_20Y1lfyXEE6D1eIEA91_L1180pknZrgrzuqSpyilvOXS=s1360-w1360-h1020-rw",
+    "streetViewUrl": "https://www.google.com/maps/embed?pb=!3m2!1sen!2sin!4v1765432762089!5m2!1sen!2sin!6m8!1m7!1sEMssM8DuJMoNr9fkMR01TQ!2m2!1d32.73623538714905!2d-117.1494914468936!3f145.29361!4f0!5f0.7820865974627469"
+  },
+  {
+    "id": 5,
+    "title": "Taronga Zoo Sydney",
+    "description": "Enjoy scenic waterfront views and incredible Australian wildlife.",
+    "image": "https://urloker.com/_next/image?url=https%3A%2F%2Fd21ms8cpd7kpwm.cloudfront.net%2Fpublic%2Ffiles%2Fimg%2Fhome-two%2Fhospital-1.webp&w=1080&q=75",
+    "streetViewUrl": "https://www.google.com/maps/embed?pb=!3m2!1sen!2sin!4v1765432896027!5m2!1sen!2sin!6m8!1m7!1sD9Qs_XRcCYXt2wkgOyqIOA!2m2!1d-33.8431810691236!2d151.2406337652627!3f220.49794553508508!4f-20.29513968135886!5f0.7820865974627469"
+  },
+  {
+    "id": 6,
+    "title": "Toronto Zoo",
+    "description": "Experience open habitats and beautifully maintained natural pathways.",
+    "image": "https://a.travel-assets.com/findyours-php/viewfinder/images/res70/49000/49162-Toronto-Zoo.jpg",
+    "streetViewUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2878.8309082872274!2d-79.18801222378012!3d43.81786667109484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4d9efc12c567d%3A0x40c31915da8af8a5!2sZebra%20Exhibit!5e0!3m2!1sen!2sin!4v1765433182748!5m2!1sen!2sin"
+  },
+  {
+    "id": 7,
+    "title": "Berlin Zoo",
+    "description": "Explore Europe's oldest zoo with rich wildlife diversity.",
+    "image": "https://www.berlin.de/binaries/asset/image_assets/9247497/source/1743494457/1000x500/",
+    "streetViewUrl": "https://www.google.com/maps/embed?pb=!3m2!1sen!2sin!4v1765433532205!5m2!1sen!2sin!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQy1sYnZ3U2c.!2m2!1d52.50918396269923!2d13.33634089761456!3f282.9136496143318!4f-27.103965522663607!5f0.7820865974627469"
+  }
+]
