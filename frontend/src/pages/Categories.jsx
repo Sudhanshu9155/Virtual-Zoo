@@ -18,35 +18,39 @@ const Categories = () => {
   };
 
   return (
-    <section className="min-h-screen bg-white py-16 mx-[100px]">
-      <div className="container mx-auto px-6">
-        <h1 className="text-4xl font-extrabold text-center mb-2 text-amber-800">
-  Explore by Categories
-</h1>
-
-        <div className="flex items-center justify-center gap-2 mb-6">
-          <span className="w-[100px] h-0.5 bg-amber-600"></span>
-          <span className="text-amber-700 text-2xl">🍃</span>
-          <span className="w-[100px] h-0.5 bg-amber-600"></span>
+    <section className="min-h-screen bg-gradient-to-b from-amber-50 to-white py-16">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="text-center mb-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-700/80 mb-2">
+            Animal Library
+          </p>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-amber-900">
+            Explore by Categories
+          </h1>
+          <p className="text-sm md:text-base text-gray-600 mt-2 max-w-xl mx-auto">
+            Jump into a group of animals you’re most curious about, from mammals
+            to reptiles and more.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((cat) => (
-            <div
+            <button
+              type="button"
               key={cat.name}
               onClick={() => handleClick(cat.name)}
-              className="cursor-pointer bg-[#15252E] rounded-2xl overflow-hidden shadow-xl transform hover:scale-105 transition duration-300"
+              className="group cursor-pointer bg-slate-900 rounded-2xl overflow-hidden shadow-xl transform hover:-translate-y-2 transition duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500/70"
             >
-              <div className="h-48 flex items-center justify-center text-6xl text-yellow-500">
+              <div className="h-44 flex items-center justify-center text-6xl text-yellow-400 group-hover:scale-110 transition-transform duration-500">
                 {cat.icon}
               </div>
 
-              <div className="bg-yellow-500 py-6 text-center">
-                <h2 className="font-bold tracking-widest text-white text-xl">
+              <div className="bg-gradient-to-r from-amber-500 to-yellow-400 py-5 text-center">
+                <h2 className="font-bold tracking-[0.25em] text-white text-sm uppercase">
                   {cat.name}
                 </h2>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>

@@ -70,13 +70,13 @@ const AnimalDetails = () => {
     );
 
   return (
-    <section className="min-h-screen bg-white text-gray-900">
+    <section className="min-h-screen bg-gradient-to-b from-amber-50 to-white text-gray-900">
       {/* Top Navigation */}
-      <nav className="border-b border-gray-200 py-4">
-        <div className="container mx-auto px-6">
+      <nav className="border-b border-amber-100 bg-white/70 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto px-4 py-4">
           <Link
             to={fromCategory ? `/gallery?category=${fromCategory}` : "/gallery"}
-            className="inline-flex items-center gap-2 text-green-600 hover:text-green-800 transition-colors duration-300 font-medium"
+            className="inline-flex items-center gap-2 text-emerald-700 hover:text-emerald-900 transition-colors duration-300 font-medium text-sm"
           >
             <svg
               className="w-5 h-5"
@@ -97,46 +97,44 @@ const AnimalDetails = () => {
       </nav>
 
       {/* Main Content */}
-      <div className="container mx-auto px-6 py-12">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          {/* Image and Quick Facts */}
-          <div className="space-y-6">
-            <div className="rounded-xl overflow-hidden shadow-lg">
-              <img
-                src={animal.image}
-                alt={animal.name}
-                className="w-full h-[500px] object-cover"
-              />
-            </div>
+      <div className="max-w-6xl mx-auto px-4 py-10 space-y-6">
+        {/* Page heading */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-700/80">
+              Animal Profile
+            </p>
+            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mt-1">
+              {animal.name}
+            </h1>
+          </div>
+          <div className="inline-flex items-center rounded-full bg-white/70 border border-emerald-200 px-4 py-1.5 text-xs font-semibold text-emerald-800 uppercase tracking-[0.2em]">
+            {animal.category}
+          </div>
+        </div>
 
-            {/* Quick Facts */}
-            <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-              <h3 className="text-gray-800 font-bold text-xl mb-4">QUICK FACTS</h3>
-              <Fact label="Scientific Name" value={animal.scientificName} />
-              <Fact label="Size" value={animal.size} />
-              <Fact label="Lifespan" value={animal.lifespan} />
-              <Fact label="Region" value={animal.region} />
-            </div>
+        {/* 1 ROW – 3 CARDS LAYOUT */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          {/* CARD 1: Image */}
+          <div className="bg-white rounded-2xl shadow-lg border border-amber-100 overflow-hidden relative">
+            <img
+              src={animal.image}
+              alt={animal.name}
+              className="w-full h-64 md:h-80 lg:h-96 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
           </div>
 
-          {/* Info Section */}
-          <div className="space-y-8">
-            <div className="inline-flex items-center px-4 py-2 bg-green-100 border border-green-200 rounded-full">
-              <span className="text-green-800 font-bold text-sm tracking-wider uppercase">
-                {animal.category}
-              </span>
-            </div>
+          {/* CARD 2: Overview & Actions */}
+          <div className="bg-white rounded-2xl shadow-md border border-emerald-100 p-6 space-y-5">
+            <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+              {animal.desc}
+            </p>
 
-            {/* <h1 className="text-5xl font-bold text-gray-900 leading-tight">
-              {animal.name}
-            </h1> */}
-            <h1 className="text-5xl font-bold text-gray-900 leading-tight flex items-center gap-4">
-              {animal.name}
-
-              {/* Sound Icon Button */}
+            <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-gray-100">
               <button
                 onClick={() => playAnimalSound(animal.name)}
-                className="p-3 rounded-full bg-green-100 hover:bg-green-200 transition shadow-md"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-sm font-semibold text-emerald-800 shadow-sm transition"
                 title="Play animal sound"
               >
                 <svg
@@ -145,7 +143,7 @@ const AnimalDetails = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6 text-green-700"
+                  className="w-4 h-4"
                 >
                   <path
                     strokeLinecap="round"
@@ -153,13 +151,36 @@ const AnimalDetails = () => {
                     d="M14.25 5.25v13.5m5.25-9.75v6m-10.5-11.25v16.5m-5.25-12v7.5"
                   />
                 </svg>
+                Hear {animal.name}
               </button>
-            </h1>
 
+            </div>
 
-            <p className="text-gray-700 text-lg leading-relaxed">{animal.desc}</p>
+            <div className="pt-2">
+              <Link
+                to="/categories"
+                className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-xl text-sm shadow-md transition-colors duration-300"
+              >
+                Explore More Animals
+              </Link>
+            </div>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* CARD 3: Quick Facts & Ecology */}
+          <div className="bg-white rounded-2xl shadow-md border border-amber-100 p-6 space-y-5">
+            <div>
+              <h3 className="text-xs font-semibold text-amber-700 uppercase tracking-[0.2em] mb-3">
+                Quick Facts
+              </h3>
+              <div className="space-y-2 text-sm">
+                <Fact label="Scientific Name" value={animal.scientificName} />
+                <Fact label="Size" value={animal.size} />
+                <Fact label="Lifespan" value={animal.lifespan} />
+                <Fact label="Region" value={animal.region} />
+              </div>
+            </div>
+
+            <div className="mt-4 border-t border-gray-100 pt-4 space-y-3 text-sm">
               <InfoCard title="Habitat" content={animal.habitat} />
               <InfoCard title="Diet" content={animal.diet} />
               <InfoCard
@@ -167,27 +188,21 @@ const AnimalDetails = () => {
                 content={
                   <div className="flex items-center gap-2">
                     <div
-                      className={`w-3 h-3 rounded-full ${animal.status === "Endangered"
-                        ? "bg-red-500"
-                        : animal.status === "Vulnerable"
+                      className={`w-2.5 h-2.5 rounded-full ${
+                        animal.status === "Endangered"
+                          ? "bg-red-500"
+                          : animal.status === "Vulnerable"
                           ? "bg-yellow-500"
-                          : "bg-green-500"
-                        }`}
+                          : "bg-emerald-500"
+                      }`}
                     ></div>
-                    <span className="text-gray-700 font-medium">{animal.status}</span>
+                    <span className="text-gray-700 font-medium text-xs md:text-sm">
+                      {animal.status}
+                    </span>
                   </div>
                 }
               />
               <InfoCard title="Primary Threats" content={animal.threats} />
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-gray-200">
-              <Link
-                to="/categories"
-                className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-4 rounded-lg transition-colors duration-300 shadow-md"
-              >
-                Explore More Animals
-              </Link>
             </div>
           </div>
         </div>

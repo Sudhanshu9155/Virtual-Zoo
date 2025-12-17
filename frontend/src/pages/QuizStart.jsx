@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import api, { saveQuizScore } from "../services/api";
 
 const QuizStart = () => {
   const [questions, setQuestions] = useState([]);
@@ -41,10 +41,17 @@ const QuizStart = () => {
     setScore(result);
     setSubmitted(true);
 
+    // Save score for leaderboard / stats
+    try {
+      await saveQuizScore(result);
+    } catch (err) {
+      console.error("Failed to save quiz score", err);
+    }
+
     // ✅ PASS CONDITION
     if (result >= 7) {
       try {
-        await axios.post("/api/user/quiz-complete");
+        await api.post("/user/quiz-complete");
         updateUser({ quizCompleted: true });
 
         // ⏳ small delay for UX

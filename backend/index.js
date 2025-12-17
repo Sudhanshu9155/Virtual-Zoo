@@ -4,33 +4,34 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
+// Models
 const Animal = require("./models/Animal");
 const QuizQuestion = require("./models/QuizQuestion");
 
+// Routes
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
+
 const app = express();
-const PORT = 5001;
-const MONGO_URI = process.env.MONGO_URI;
+const PORT = process.env.PORT || 5001;
 
 // ---------------- MIDDLEWARE ----------------
 app.use(express.json());
 app.use(cookieParser());
 
-
-// ---------------- MONGODB ----------------
-mongoose.connect(MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.error("MongoDB Error:", err));
-
-// ---------------- AUTH ROUTES ----------------
 app.use(cors({
   origin: "http://localhost:5173",
   credentials: true
 }));
 
+// ---------------- DATABASE ----------------
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.error("MongoDB Error:", err));
 
-
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/user", require("./routes/user"));
+// ---------------- ROUTES ----------------
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 
 // ---------------- ANIMAL ROUTES ----------------
 app.get("/api/animals", async (req, res) => {
@@ -44,7 +45,7 @@ app.get("/api/animals", async (req, res) => {
 
     const animals = await Animal.find(query).lean();
     res.json(animals);
-  } catch {
+  } catch (err) {
     res.status(500).json({ message: "Failed to fetch animals" });
   }
 });
@@ -52,9 +53,11 @@ app.get("/api/animals", async (req, res) => {
 app.get("/api/animals/:id", async (req, res) => {
   try {
     const animal = await Animal.findOne({ id: req.params.id }).lean();
-    if (!animal) return res.status(404).json({ message: "Animal not found" });
+    if (!animal) {
+      return res.status(404).json({ message: "Animal not found" });
+    }
     res.json(animal);
-  } catch {
+  } catch (err) {
     res.status(500).json({ message: "Failed to fetch animal" });
   }
 });
@@ -72,12 +75,12 @@ app.get("/api/quiz", async (req, res) => {
 
     const questions = await QuizQuestion.find(filter).lean();
     res.json(questions);
-  } catch {
+  } catch (err) {
     res.status(500).json({ message: "Quiz fetch error" });
   }
 });
 
-// ---------------- HEALTH ----------------
+// ---------------- HEALTH CHECK ----------------
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
