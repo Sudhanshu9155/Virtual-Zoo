@@ -36,7 +36,7 @@ const AnimalDetails = () => {
 
   const playAnimalSound = async (name) => {
     try {
-      const response = await fetch("http://localhost:5002/api/sound", {
+      const response = await fetch("http://localhost:5001/api/sound", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: `${name} animal sound` })
