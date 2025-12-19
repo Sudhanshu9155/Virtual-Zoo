@@ -1,4 +1,5 @@
-node-modules
+node_modules
 logs
 .env
-dotenv
+*.log
+.DS_Store
