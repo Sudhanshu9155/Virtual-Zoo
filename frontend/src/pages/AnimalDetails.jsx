@@ -41,6 +41,13 @@ const AnimalDetails = () => {
         body: JSON.stringify({ prompt: `${name} animal sound` })
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Sound API error:", errorData);
+        alert(`Failed to generate sound: ${errorData.details || errorData.error || 'Unknown error'}`);
+        return;
+      }
+
       const soundBlob = await response.blob();
       const soundURL = URL.createObjectURL(soundBlob);
       const audio = new Audio(soundURL);
@@ -48,6 +55,7 @@ const AnimalDetails = () => {
 
     } catch (err) {
       console.error("Error playing sound:", err);
+      alert("Failed to play animal sound. Please check your connection and try again.");
     }
   };
 
@@ -188,10 +196,10 @@ const AnimalDetails = () => {
                   <div className="flex items-center gap-2">
                     <div
                       className={`w-2.5 h-2.5 rounded-full ${animal.status === "Endangered"
-                          ? "bg-red-500"
-                          : animal.status === "Vulnerable"
-                            ? "bg-yellow-500"
-                            : "bg-emerald-500"
+                        ? "bg-red-500"
+                        : animal.status === "Vulnerable"
+                          ? "bg-yellow-500"
+                          : "bg-emerald-500"
                         }`}
                     ></div>
                     <span className="text-gray-700 font-medium text-xs md:text-sm">

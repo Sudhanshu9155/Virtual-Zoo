@@ -46,8 +46,12 @@ app.use(cors({
 
 // ---------------- DATABASE ----------------
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.error("MongoDB Error:", err));
+  .then(() => {
+    console.log("✅ MongoDB connected");
+    console.log("📁 Database:", mongoose.connection.db.databaseName);
+    console.log("🔗 Connection string:", process.env.MONGO_URI?.replace(/\/\/.*:.*@/, '//***:***@'));
+  })
+  .catch(err => console.error("❌ MongoDB Error:", err));
 
 // ---------------- ROUTES ----------------
 app.use("/api/auth", authRoutes);

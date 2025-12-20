@@ -19,22 +19,32 @@ const transporter = nodemailer.createTransport({
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    console.log("📝 Registration attempt:", { name, email });
 
     if (!name || !email || !password) {
+      console.log("❌ Missing fields");
       return res.status(400).json({ message: "All fields are required" });
     }
 
     const existing = await User.findOne({ email });
     if (existing) {
+      console.log("❌ Email already exists:", email);
       return res.status(409).json({ message: "Email already registered" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await User.create({ name, email, password: hashedPassword });
+    const newUser = await User.create({ name, email, password: hashedPassword });
+
+    console.log("✅ User created successfully:", {
+      id: newUser._id,
+      name: newUser.name,
+      email: newUser.email
+    });
 
     res.json({ message: "Registration successful" });
   } catch (err) {
-    res.status(500).json({ message: "Registration failed" });
+    console.error("❌ Registration error:", err);
+    res.status(500).json({ message: "Registration failed", error: err.message });
   }
 });
 

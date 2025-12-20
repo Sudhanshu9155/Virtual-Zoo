@@ -40,14 +40,24 @@ router.post("/quiz-complete", auth, async (req, res) => {
 router.post("/quiz-score", auth, async (req, res) => {
   try {
     const { score } = req.body;
+    console.log("🎯 Quiz score submission:", { userId: req.userId, score });
+
     if (typeof score !== "number") {
+      console.log("❌ Invalid score type:", typeof score);
       return res.status(400).json({ message: "Score must be a number" });
     }
 
     const user = await User.findById(req.userId);
     if (!user) {
+      console.log("❌ User not found:", req.userId);
       return res.status(404).json({ message: "User not found" });
     }
+
+    console.log("📊 Before update:", {
+      scores: user.scores,
+      bestScore: user.bestScore,
+      quizzesTaken: user.quizzesTaken
+    });
 
     user.scores.push(score);
     user.lastScore = score;
@@ -56,12 +66,20 @@ router.post("/quiz-score", auth, async (req, res) => {
 
     await user.save();
 
+    console.log("✅ Score saved successfully:", {
+      userId: user._id,
+      newScore: score,
+      totalScores: user.scores.length,
+      bestScore: user.bestScore
+    });
+
     const cleanUser = user.toObject();
     delete cleanUser.password;
 
     res.json({ message: "Score recorded", user: cleanUser });
   } catch (err) {
-    res.status(500).json({ message: "Could not record score" });
+    console.error("❌ Quiz score error:", err);
+    res.status(500).json({ message: "Could not record score", error: err.message });
   }
 });
 
