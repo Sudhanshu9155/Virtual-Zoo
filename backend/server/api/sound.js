@@ -32,12 +32,21 @@ router.post("/", async (req, res) => {
     res.set("Content-Type", "audio/mpeg");
     res.send(result.data);
   } catch (error) {
-    console.error("❌ Sound API error:", error.response?.data || error.message);
+    // Decode buffer error responses from ElevenLabs
+    let errorData = error.response?.data;
+    if (errorData && Buffer.isBuffer(errorData)) {
+      try {
+        errorData = JSON.parse(errorData.toString());
+      } catch (e) {
+        errorData = errorData.toString();
+      }
+    }
+
+    console.error("❌ Sound API error:", errorData || error.message);
     console.error("Status:", error.response?.status);
-    console.error("Headers:", error.response?.headers);
 
     const statusCode = error.response?.status || 500;
-    const errorMessage = error.response?.data?.detail || error.message || "Sound generation failed";
+    const errorMessage = errorData?.detail || errorData || error.message || "Sound generation failed";
 
     res.status(statusCode).json({
       error: "Sound generation failed",
