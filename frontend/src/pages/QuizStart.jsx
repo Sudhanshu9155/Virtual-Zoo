@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import { useAuth } from "../context/AuthContext";
 import api, { saveQuizScore } from "../services/api";
+import API_URL from "../config/api";
 
 const QuizStart = () => {
   const [questions, setQuestions] = useState([]);
@@ -20,7 +21,7 @@ const QuizStart = () => {
   const category = params.get("category");
 
   useEffect(() => {
-    fetch(`http://localhost:5001/api/quiz?animal=${animal}`)
+    fetch(`${API_URL}/quiz?animal=${animal}`)
       .then((res) => res.json())
       .then((data) => {
         setQuestions(data.slice(0, 10));
@@ -129,9 +130,8 @@ const QuizStart = () => {
         ) : (
           <div className="text-center py-10">
             <h2
-              className={`text-4xl font-extrabold mb-4 ${
-                score >= 7 ? "text-green-700" : "text-red-600"
-              }`}
+              className={`text-4xl font-extrabold mb-4 ${score >= 7 ? "text-green-700" : "text-red-600"
+                }`}
             >
               Score: {score} / {questions.length}
             </h2>

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Loader from "../components/Loader";
 import { useLocation } from "react-router-dom";
-
-
+import API_URL from "../config/api";
 
 const AnimalDetails = () => {
   const { id } = useParams();
@@ -17,7 +16,7 @@ const AnimalDetails = () => {
   useEffect(() => {
     const fetchAnimal = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/api/animals/${id}`);
+        const response = await fetch(`${API_URL}/animals/${id}`);
         if (!response.ok) throw new Error("Animal not found");
         const data = await response.json();
         setAnimal(data);
@@ -36,7 +35,7 @@ const AnimalDetails = () => {
 
   const playAnimalSound = async (name) => {
     try {
-      const response = await fetch("http://localhost:5001/api/sound", {
+      const response = await fetch(`${API_URL}/sound`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: `${name} animal sound` })
@@ -188,13 +187,12 @@ const AnimalDetails = () => {
                 content={
                   <div className="flex items-center gap-2">
                     <div
-                      className={`w-2.5 h-2.5 rounded-full ${
-                        animal.status === "Endangered"
+                      className={`w-2.5 h-2.5 rounded-full ${animal.status === "Endangered"
                           ? "bg-red-500"
                           : animal.status === "Vulnerable"
-                          ? "bg-yellow-500"
-                          : "bg-emerald-500"
-                      }`}
+                            ? "bg-yellow-500"
+                            : "bg-emerald-500"
+                        }`}
                     ></div>
                     <span className="text-gray-700 font-medium text-xs md:text-sm">
                       {animal.status}

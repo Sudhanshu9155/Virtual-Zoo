@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import AnimalCard from "../components/AnimalCard";
 import Loader from "../components/Loader";
+import API_URL from "../config/api";
 
 const Gallery = () => {
   const [animals, setAnimals] = useState([]);
@@ -12,7 +13,7 @@ const Gallery = () => {
   const selectedCategory = params.get("category");
 
   useEffect(() => {
-    let url = "http://localhost:5001/api/animals";
+    let url = `${API_URL}/animals`;
 
     if (selectedCategory) {
       url += `?category=${selectedCategory}`;

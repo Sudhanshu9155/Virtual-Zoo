@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
 import Loader from "../components/Loader";
+import API_URL from "../config/api";
 
 const QuizAnimalList = () => {
   const [animals, setAnimals] = useState([]);
@@ -21,7 +22,7 @@ const QuizAnimalList = () => {
 
     setLoading(true);
 
-    fetch(`http://localhost:5001/api/animals?category=${category}`)
+    fetch(`${API_URL}/animals?category=${category}`)
       .then((res) => res.json())
       .then((data) => {
         setAnimals(data);

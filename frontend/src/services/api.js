@@ -1,8 +1,8 @@
 import axios from "axios";
 
-// Backend runs on 5001
+// Backend deployed on Render
 const api = axios.create({
-  baseURL: "http://localhost:5001/api",
+  baseURL: "https://virtual-zoo-5qda.onrender.com/api",
   withCredentials: true
 });
 
