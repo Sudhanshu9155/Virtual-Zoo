@@ -50,61 +50,105 @@ router.post("/register", async (req, res) => {
 
 // LOGIN
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
+    console.log("🔐 Login attempt:", { email });
 
-  const user = await User.findOne({ email });
-  if (!user) return res.status(400).json({ message: "User not found" });
+    if (!email || !password) {
+      console.log("❌ Missing credentials");
+      return res.status(400).json({ message: "Email and password are required" });
+    }
 
-  const match = await bcrypt.compare(password, user.password);
-  if (!match) return res.status(400).json({ message: "Invalid password" });
+    const user = await User.findOne({ email });
+    if (!user) {
+      console.log("❌ User not found:", email);
+      return res.status(400).json({ message: "User not found" });
+    }
 
-  const token = jwt.sign(
-    { id: user._id },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
-  );
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      console.log("❌ Invalid password for:", email);
+      return res.status(400).json({ message: "Invalid password" });
+    }
 
-  res.json({ token });
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    console.log("✅ Login successful:", { email, userId: user._id });
+    res.json({ token });
+  } catch (err) {
+    console.error("❌ Login error:", err);
+    res.status(500).json({ message: "Login failed", error: err.message });
+  }
 });
 
 // FORGOT PASSWORD
 router.post("/forgot-password", async (req, res) => {
-  const { email } = req.body;
+  try {
+    const { email } = req.body;
+    console.log("🔑 Forgot password request:", { email });
 
-  const user = await User.findOne({ email });
-  if (!user) return res.status(404).json({ message: "User not found" });
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
 
-  const otp = Math.floor(100000 + Math.random() * 900000);
+    const user = await User.findOne({ email });
+    if (!user) {
+      console.log("❌ User not found:", email);
+      return res.status(404).json({ message: "User not found" });
+    }
 
-  user.resetOTP = otp;
-  user.otpExpiry = Date.now() + 10 * 60 * 1000;
-  await user.save();
+    const otp = Math.floor(100000 + Math.random() * 900000);
 
-  await transporter.sendMail({
-    to: email,
-    subject: "Virtual Zoo Password Reset OTP",
-    text: `Your OTP is ${otp}`
-  });
+    user.resetOTP = otp;
+    user.otpExpiry = Date.now() + 10 * 60 * 1000;
+    await user.save();
 
-  res.json({ message: "OTP sent to email" });
+    await transporter.sendMail({
+      to: email,
+      subject: "Virtual Zoo Password Reset OTP",
+      text: `Your OTP is ${otp}`
+    });
+
+    console.log("✅ OTP sent to:", email);
+    res.json({ message: "OTP sent to email" });
+  } catch (err) {
+    console.error("❌ Forgot password error:", err);
+    res.status(500).json({ message: "Failed to send OTP", error: err.message });
+  }
 });
 
 // RESET PASSWORD
 router.post("/reset-password", async (req, res) => {
-  const { email, otp, newPassword } = req.body;
+  try {
+    const { email, otp, newPassword } = req.body;
+    console.log("🔄 Password reset attempt:", { email });
 
-  const user = await User.findOne({ email });
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
-  if (!user || user.resetOTP !== otp || user.otpExpiry < Date.now()) {
-    return res.status(400).json({ message: "Invalid or expired OTP" });
+    const user = await User.findOne({ email });
+
+    if (!user || user.resetOTP !== otp || user.otpExpiry < Date.now()) {
+      console.log("❌ Invalid or expired OTP for:", email);
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.resetOTP = null;
+    user.otpExpiry = null;
+    await user.save();
+
+    console.log("✅ Password reset successful for:", email);
+    res.json({ message: "Password reset successful" });
+  } catch (err) {
+    console.error("❌ Reset password error:", err);
+    res.status(500).json({ message: "Failed to reset password", error: err.message });
   }
-
-  user.password = await bcrypt.hash(newPassword, 10);
-  user.resetOTP = null;
-  user.otpExpiry = null;
-  await user.save();
-
-  res.json({ message: "Password reset successful" });
 });
 
 module.exports = router;

@@ -38,11 +38,18 @@ app.use(cors({
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      // Return false instead of throwing error to prevent server crash
+      console.warn(`⚠️ CORS blocked origin: ${origin}`);
+      callback(null, false);
     }
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Handle preflight requests explicitly
+app.options('*', cors());
 
 // ---------------- DATABASE ----------------
 mongoose.connect(process.env.MONGO_URI)
