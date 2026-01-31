@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +26,7 @@
             background: white;
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
         h1 {
@@ -130,8 +131,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .status-indicator {
@@ -178,6 +184,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>🔍 Virtual Zoo Backend Diagnostic</h1>
@@ -250,7 +257,7 @@
     </div>
 
     <script>
-        const BACKEND_URL = 'https://virtual-zoo-6d78.onrender.com';
+        const BACKEND_URL = 'https://virtual-zoo-5qda.onrender.com';
         const FRONTEND_ORIGIN = 'https://virtual-zoo-three.vercel.app';
 
         let testResults = {
@@ -263,9 +270,9 @@
         function showResult(testNum, message, type) {
             const resultDiv = document.getElementById(`result${testNum}`);
             const statusDiv = document.getElementById(`status${testNum}`);
-            
+
             resultDiv.innerHTML = `<div class="result ${type}">${message}</div>`;
-            
+
             statusDiv.className = 'status-indicator ' + (type === 'success' ? 'success' : 'error');
         }
 
@@ -279,7 +286,7 @@
             try {
                 const response = await fetch(`${BACKEND_URL}/api/health`);
                 const data = await response.json();
-                
+
                 if (data.status === 'ok') {
                     testResults.health = true;
                     showResult(1, `✅ SUCCESS!\n\nStatus: ${response.status}\nResponse: ${JSON.stringify(data, null, 2)}`, 'success');
@@ -380,38 +387,39 @@
             await testRegister();
             await new Promise(resolve => setTimeout(resolve, 500));
             await testAnimals();
-            
+
             showSummary();
         }
 
         function showSummary() {
             const summary = document.getElementById('summary');
             const summaryContent = document.getElementById('summaryContent');
-            
+
             const passed = Object.values(testResults).filter(r => r === true).length;
             const total = Object.values(testResults).filter(r => r !== null).length;
-            
+
             let html = `<div class="summary-item"><strong>Tests Passed:</strong> ${passed} / ${total}</div>`;
-            
+
             if (testResults.health === false) {
                 html += `<div class="summary-item">❌ Backend server is not responding. Check Render deployment.</div>`;
             }
-            
+
             if (testResults.cors === false) {
                 html += `<div class="summary-item">❌ CORS is not configured. Add FRONTEND_URL to Render environment variables.</div>`;
             }
-            
+
             if (testResults.register === false && testResults.cors === true) {
                 html += `<div class="summary-item">⚠️ CORS is OK but register endpoint has issues. Check backend logs.</div>`;
             }
-            
+
             if (passed === total && total > 0) {
                 html += `<div class="summary-item" style="background: #d4edda; color: #155724; font-weight: bold;">🎉 All tests passed! Your backend is working correctly!</div>`;
             }
-            
+
             summaryContent.innerHTML = html;
             summary.style.display = 'block';
         }
     </script>
 </body>
+
 </html>
