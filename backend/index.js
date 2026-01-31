@@ -52,6 +52,9 @@ app.use(cors({
 app.options('*', cors());
 
 // ---------------- DATABASE ----------------
+let connectionAttempts = 0;
+const MAX_RETRY_ATTEMPTS = 3; // Only retry 3 times initially
+
 const connectDB = async () => {
   const options = {
     serverSelectionTimeoutMS: 10000, // Timeout after 10s instead of 30s
@@ -63,31 +66,49 @@ const connectDB = async () => {
 
   try {
     await mongoose.connect(process.env.MONGO_URI, options);
+    connectionAttempts = 0; // Reset on success
     console.log("✅ MongoDB connected");
     console.log("📁 Database:", mongoose.connection.db.databaseName);
     console.log("🔗 Connection string:", process.env.MONGO_URI?.replace(/\/\/.*:.*@/, '//***:***@'));
   } catch (err) {
+    connectionAttempts++;
     console.error("❌ MongoDB Connection Error:", err.message);
     console.error("🔍 Error Code:", err.code);
-    console.error("⚠️ Make sure:");
-    console.error("   1. MongoDB Atlas Network Access allows 0.0.0.0/0");
-    console.error("   2. MONGO_URI is correct in environment variables");
-    console.error("   3. Your internet connection is stable");
-    console.error("   4. MongoDB Atlas cluster is running");
 
-    // Retry connection after 5 seconds
-    console.log("🔄 Retrying connection in 5 seconds...");
-    setTimeout(connectDB, 5000);
+    if (connectionAttempts <= MAX_RETRY_ATTEMPTS) {
+      console.error("⚠️ Make sure:");
+      console.error("   1. MongoDB Atlas Network Access allows 0.0.0.0/0");
+      console.error("   2. MONGO_URI is correct in environment variables");
+      console.error("   3. Your internet connection is stable");
+      console.error("   4. MongoDB Atlas cluster is running");
+      console.log(`🔄 Retrying connection in 5 seconds... (Attempt ${connectionAttempts}/${MAX_RETRY_ATTEMPTS})`);
+      setTimeout(connectDB, 5000);
+    } else {
+      console.error("\n❌ MongoDB connection failed after", MAX_RETRY_ATTEMPTS, "attempts");
+      console.error("⚠️ Server will continue running but database operations will fail");
+      console.error("\n💡 LOCAL DEVELOPMENT:");
+      console.error("   - This is OK if your network blocks MongoDB Atlas");
+      console.error("   - You can still develop frontend using Render backend");
+      console.error("\n💡 RENDER/PRODUCTION:");
+      console.error("   - Go to MongoDB Atlas → Network Access");
+      console.error("   - Add IP: 0.0.0.0/0 (Allow from anywhere)");
+      console.error("   - Update Render environment variables");
+      console.error("   - Redeploy on Render\n");
+    }
   }
 };
 
 // Handle connection events
 mongoose.connection.on('disconnected', () => {
-  console.warn('⚠️ MongoDB disconnected. Attempting to reconnect...');
+  console.warn('⚠️ MongoDB disconnected.');
 });
 
 mongoose.connection.on('error', (err) => {
   console.error('❌ MongoDB connection error:', err.message);
+});
+
+mongoose.connection.on('connected', () => {
+  console.log('✅ MongoDB reconnected successfully');
 });
 
 // Start connection
