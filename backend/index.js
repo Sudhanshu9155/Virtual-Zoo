@@ -52,13 +52,46 @@ app.use(cors({
 app.options('*', cors());
 
 // ---------------- DATABASE ----------------
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
+const connectDB = async () => {
+  const options = {
+    serverSelectionTimeoutMS: 10000, // Timeout after 10s instead of 30s
+    socketTimeoutMS: 45000,
+    family: 4, // Use IPv4, skip trying IPv6
+    retryWrites: true,
+    w: 'majority'
+  };
+
+  try {
+    await mongoose.connect(process.env.MONGO_URI, options);
     console.log("✅ MongoDB connected");
     console.log("📁 Database:", mongoose.connection.db.databaseName);
     console.log("🔗 Connection string:", process.env.MONGO_URI?.replace(/\/\/.*:.*@/, '//***:***@'));
-  })
-  .catch(err => console.error("❌ MongoDB Error:", err));
+  } catch (err) {
+    console.error("❌ MongoDB Connection Error:", err.message);
+    console.error("🔍 Error Code:", err.code);
+    console.error("⚠️ Make sure:");
+    console.error("   1. MongoDB Atlas Network Access allows 0.0.0.0/0");
+    console.error("   2. MONGO_URI is correct in environment variables");
+    console.error("   3. Your internet connection is stable");
+    console.error("   4. MongoDB Atlas cluster is running");
+
+    // Retry connection after 5 seconds
+    console.log("🔄 Retrying connection in 5 seconds...");
+    setTimeout(connectDB, 5000);
+  }
+};
+
+// Handle connection events
+mongoose.connection.on('disconnected', () => {
+  console.warn('⚠️ MongoDB disconnected. Attempting to reconnect...');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('❌ MongoDB connection error:', err.message);
+});
+
+// Start connection
+connectDB();
 
 // ---------------- ROUTES ----------------
 app.use("/api/auth", authRoutes);
