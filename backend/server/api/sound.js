@@ -1,7 +1,9 @@
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
+const env = require("dotenv").config()
 
+console.log(process.env)
 router.post("/", async (req, res) => {
   const { prompt } = req.body;
 
