@@ -32,14 +32,45 @@ app.use(cookieParser());
 
 // app.use(cors(corsOptions));
 // app.options("*", cors(corsOptions));
-app.use(
-  cors({
-    origin: "https://virtual-zoo-three.vercel.app",
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: "https://virtual-zoo-three.vercel.app",
+//     credentials: true,
+//   })
+// );
 
-app.options("*", cors());
+// app.options("*", cors());
+
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    "http://localhost:5173",
+    "https://virtual-zoo-three.vercel.app",
+  ];
+
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+  }
+
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+
+  // 🔥 THIS is what fixes your issue
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
 
 
 
