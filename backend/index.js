@@ -32,16 +32,15 @@ app.use(cookieParser());
 
 // app.use(cors(corsOptions));
 // app.options("*", cors(corsOptions));
-const corsOptions = {
-  origin: [
-    "http://localhost:5173",
-    "https://virtual-zoo-three.vercel.app",
-  ],
-  credentials: true,
-};
+app.use(
+  cors({
+    origin: "https://virtual-zoo-three.vercel.app",
+    credentials: true,
+  })
+);
 
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.options("*", cors());
+
 
 
 // ---------------- DATABASE ----------------
